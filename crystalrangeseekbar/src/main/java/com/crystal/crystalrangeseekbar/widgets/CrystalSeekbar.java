@@ -6,9 +6,12 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.VectorDrawable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -161,6 +164,13 @@ public class CrystalSeekbar extends View {
         leftThumbPressed = getBitmap(leftDrawablePressed);
         leftThumbPressed = (leftThumbPressed == null) ? leftThumb : leftThumbPressed;
 
+        if(leftDrawable instanceof VectorDrawable) {
+            tintBitmap(leftThumb, leftThumbColorNormal);
+        }
+        if(leftDrawablePressed instanceof  VectorDrawable) {
+            tintBitmap(leftThumbPressed, leftThumbColorPressed);
+        }
+
         thumbWidth  = getThumbWidth();
         thumbHeight = getThumbHeight();
 
@@ -175,7 +185,7 @@ public class CrystalSeekbar extends View {
 
         setMinStartValue();
 
-	setWillNotDraw(false);
+	    setWillNotDraw(false);
     }
 
     //////////////////////////////////////////
@@ -458,7 +468,18 @@ public class CrystalSeekbar extends View {
     //////////////////////////////////////////
 
     protected Bitmap getBitmap(Drawable drawable){
-        return (drawable != null) ? ((BitmapDrawable) drawable).getBitmap() : null;
+        //return (drawable != null) ? ((BitmapDrawable) drawable).getBitmap() : null;
+        if(drawable == null) {
+            return null;
+        }
+        else if(drawable instanceof BitmapDrawable) {
+            return ((BitmapDrawable) drawable).getBitmap();
+        }
+        else if(drawable instanceof VectorDrawable) {
+            return vectorDrawableToBitmap(drawable);
+        }
+
+        return null;
     }
 
     protected float getCornerRadius(final TypedArray typedArray){
@@ -728,6 +749,34 @@ public class CrystalSeekbar extends View {
             return v.byteValue();
         }
         throw new IllegalArgumentException("Number class '" + value.getClass().getName() + "' is not supported");
+    }
+
+    private Bitmap vectorDrawableToBitmap(Drawable drawable) {
+        try {
+            int thumbSize = (int)getThumbDiameter();
+
+            Bitmap bitmap;
+
+            //bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+            bitmap = Bitmap.createBitmap(thumbSize, thumbSize, Bitmap.Config.ARGB_8888);
+
+            Canvas canvas = new Canvas(bitmap);
+            //drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+            drawable.setBounds(0, 0, thumbSize, thumbSize);
+            drawable.draw(canvas);
+            return bitmap;
+        } catch (OutOfMemoryError e) {
+            // Handle the error
+            return null;
+        }
+    }
+
+    private void tintBitmap(Bitmap bitmap, int color) {
+        Paint paint = new Paint();
+        paint.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
+
+        Canvas canvas = new Canvas(bitmap);
+        canvas.drawBitmap(bitmap, 0, 0, paint);
     }
 
     //////////////////////////////////////////
