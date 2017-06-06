@@ -469,17 +469,15 @@ public class CrystalSeekbar extends View {
 
     protected Bitmap getBitmap(Drawable drawable){
         //return (drawable != null) ? ((BitmapDrawable) drawable).getBitmap() : null;
-        if(drawable == null) {
-            return null;
-        }
-        else if(drawable instanceof BitmapDrawable) {
+        if(drawable instanceof BitmapDrawable) {
             return ((BitmapDrawable) drawable).getBitmap();
         }
         else if(drawable instanceof VectorDrawable) {
             return vectorDrawableToBitmap(drawable);
         }
-
-        return null;
+        else {
+            return null;
+        }
     }
 
     protected float getCornerRadius(final TypedArray typedArray){
@@ -755,13 +753,10 @@ public class CrystalSeekbar extends View {
         try {
             int thumbSize = (int)getThumbDiameter();
 
-            Bitmap bitmap;
-
-            //bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-            bitmap = Bitmap.createBitmap(thumbSize, thumbSize, Bitmap.Config.ARGB_8888);
+            Bitmap bitmap = Bitmap.createBitmap(thumbSize, thumbSize, Bitmap.Config.ARGB_8888);
 
             Canvas canvas = new Canvas(bitmap);
-            //drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+
             drawable.setBounds(0, 0, thumbSize, thumbSize);
             drawable.draw(canvas);
             return bitmap;
