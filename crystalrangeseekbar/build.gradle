@@ -37,6 +37,9 @@ android {
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
+
+        //use svg as drawable
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {

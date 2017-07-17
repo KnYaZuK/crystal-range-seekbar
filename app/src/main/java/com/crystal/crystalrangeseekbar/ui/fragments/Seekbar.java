@@ -60,6 +60,8 @@ public class Seekbar extends Fragment {
         setRangeSeekbar6();
         setRangeSeekbar7();
         setRangeSeekbar8();
+        setRangeSeekbar9();
+        setRangeSeekbar10();
     }
 
     private void setRangeSeekbar1(){
@@ -223,6 +225,44 @@ public class Seekbar extends Fragment {
 
         // change position left to right
         rangeSeekbar.setPosition(CrystalSeekbar.Position.RIGHT).apply();
+
+        // set listener
+        rangeSeekbar.setOnSeekbarChangeListener(new OnSeekbarChangeListener() {
+            @Override
+            public void valueChanged(Number minValue) {
+                tvMin.setText(String.valueOf(minValue));
+            }
+        });
+
+    }
+
+    private void setRangeSeekbar9(){
+
+        // get seekbar from view
+        final CrystalSeekbar rangeSeekbar = (CrystalSeekbar) rootView.findViewById(R.id.rangeSeekbar9);
+
+        // get min and max text view
+        final TextView tvMin = (TextView) rootView.findViewById(R.id.textMin9);
+        final TextView tvMax = (TextView) rootView.findViewById(R.id.textMax9);
+
+        // set listener
+        rangeSeekbar.setOnSeekbarChangeListener(new OnSeekbarChangeListener() {
+            @Override
+            public void valueChanged(Number minValue) {
+                tvMin.setText(String.valueOf(minValue));
+            }
+        });
+
+    }
+
+    private void setRangeSeekbar10(){
+
+        // get seekbar from view
+        final CrystalSeekbar rangeSeekbar = (CrystalSeekbar) rootView.findViewById(R.id.rangeSeekbar10);
+
+        // get min and max text view
+        final TextView tvMin = (TextView) rootView.findViewById(R.id.textMin10);
+        final TextView tvMax = (TextView) rootView.findViewById(R.id.textMax10);
 
         // set listener
         rangeSeekbar.setOnSeekbarChangeListener(new OnSeekbarChangeListener() {
